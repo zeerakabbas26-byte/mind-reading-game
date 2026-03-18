@@ -85,9 +85,12 @@ button:hover {
   <div id="gameArea"></div>
   <div class="loader" id="loader"></div>
   <div class="final" id="final"></div>
+
+  <p style="margin-top:15px; font-size:12px; opacity:0.7;">
+    Created by Zeerak Abbas
+  </p>
 </div>
 
-<!-- Sounds -->
 <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
 <audio id="revealSound" src="https://www.soundjay.com/misc/sounds/magic-chime-01.mp3"></audio>
 
@@ -110,7 +113,17 @@ function playReveal(){
 start();
 
 function start(){
-  game(1);
+  const el = document.getElementById('gameArea');
+  const final = document.getElementById('final');
+  const loader = document.getElementById('loader');
+
+  final.innerHTML = '';
+  loader.innerHTML = '';
+
+  el.innerHTML = `
+    <p class="step-text">🧠 Can I read your mind?</p>
+    <button onclick="game(1)">Start</button>
+  `;
 }
 
 function game(step){
@@ -166,7 +179,12 @@ function game(step){
 
     el.innerHTML = `<p class="step-text">😳 Analyzing your mind...</p>`;
 
-    let texts = ["Scanning brain...","Reading thoughts...","Almost there..."];
+    let texts = [
+      "Connecting to AI...",
+      "Analyzing brain pattern...",
+      "Decoding thoughts..."
+    ];
+
     let i = 0;
 
     let fake = setInterval(()=>{
@@ -188,8 +206,12 @@ function game(step){
           cur = ans;
           clearInterval(interval);
         }
-        final.innerHTML = `✨ Final Answer: ${cur.toFixed(1)} ✨`;
+        final.innerHTML = `😳 I READ YOUR MIND... <br> ✨ Your number is: ${cur.toFixed(1)} ✨`;
       },40);
+
+      setTimeout(()=>{
+        final.innerHTML += `<br><br><button onclick="start()">🔁 Play Again</button>`;
+      },1500);
 
     },3000);
   }
