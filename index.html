@@ -205,10 +205,8 @@ function game(step){
         if(cur >= ans){
           cur = ans;
           clearInterval(interval);
-      final.innerHTML = `✨ I Read Your Mind ✨ <br><br> Your Number is: <b>${cur.toFixed(1)}</b>`;
-      },40);
-
-      setTimeout(()=>{
+    final.innerHTML = `✨ I Read Your Mind ✨ <br><br> Your Number is: <b>${cur.toFixed(1)}</b>`;
+    setTimeout(()=>{
         final.innerHTML += `<br><br><button onclick="start()">🔁 Play Again</button>`;
       },1500);
 
