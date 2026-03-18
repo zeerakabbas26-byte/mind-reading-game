@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Mind Reading Game</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg,#141e30,#243b55);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+  color:#fff;
+}
+
+.container {
+  background:rgba(255,255,255,0.06);
+  padding:30px;
+  border-radius:25px;
+  width:95%;
+  max-width:420px;
+  text-align:center;
+  backdrop-filter:blur(15px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+}
+
+h1 { margin-bottom:10px; }
+
+.step-text {
+  margin:20px 0;
+  font-size:18px;
+  animation:fade .5s;
+}
+
+button {
+  padding:12px 22px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(45deg,#ff2d55,#ff7a18);
+  color:#fff;
+  cursor:pointer;
+  transition:.3s;
+}
+
+button:hover {
+  transform:scale(1.07);
+}
+
+.final {
+  font-size:34px;
+  margin-top:20px;
+  color:#00ffe0;
+  animation:glow 1s infinite alternate;
+}
+
+.loader {
+  margin-top:15px;
+  font-size:14px;
+  opacity:.8;
+}
+
+@keyframes fade {
+  from {opacity:0; transform:translateY(10px)}
+  to {opacity:1; transform:translateY(0)}
+}
+
+@keyframes glow {
+  from {text-shadow:0 0 10px #00ffe0}
+  to {text-shadow:0 0 30px #00ffe0}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🧠 AI Mind Reading Game</h1>
+
+  <div id="gameArea"></div>
+  <div class="loader" id="loader"></div>
+  <div class="final" id="final"></div>
+</div>
+
+<!-- Sounds -->
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+<audio id="revealSound" src="https://www.soundjay.com/misc/sounds/magic-chime-01.mp3"></audio>
+
+<script>
+
+let added = 0;
+
+function rand(){
+  return Math.floor(Math.random()*10)+1;
+}
+
+function playClick(){
+  document.getElementById('clickSound').play();
+}
+
+function playReveal(){
+  document.getElementById('revealSound').play();
+}
+
+start();
+
+function start(){
+  game(1);
+}
+
+function game(step){
+
+  playClick();
+
+  const el = document.getElementById('gameArea');
+  const final = document.getElementById('final');
+  const loader = document.getElementById('loader');
+
+  final.innerHTML = '';
+  loader.innerHTML = '';
+
+  if(step === 1){
+    el.innerHTML = `
+      <p class="step-text">Step 1: Think a number (1–10)</p>
+      <button onclick="game(2)">Next</button>
+    `;
+  }
+
+  else if(step === 2){
+    el.innerHTML = `
+      <p class="step-text">Step 2: Think your friend's number same as yours</p>
+      <button onclick="game(3)">Next</button>
+    `;
+  }
+
+  else if(step === 3){
+    added = rand();
+    el.innerHTML = `
+      <p class="step-text">Step 3: Add my number <b>${added}</b></p>
+      <button onclick="game(4)">Next</button>
+    `;
+  }
+
+  else if(step === 4){
+    el.innerHTML = `
+      <p class="step-text">Step 4: Give half to the poor</p>
+      <button onclick="game(5)">Next</button>
+    `;
+  }
+
+  else if(step === 5){
+    el.innerHTML = `
+      <p class="step-text">Step 5: Take back your friend's number</p>
+      <button onclick="game(6)">Reveal Answer</button>
+    `;
+  }
+
+  else if(step === 6){
+
+    let ans = added / 2;
+
+    el.innerHTML = `<p class="step-text">😳 Analyzing your mind...</p>`;
+
+    let texts = ["Scanning brain...","Reading thoughts...","Almost there..."];
+    let i = 0;
+
+    let fake = setInterval(()=>{
+      loader.innerHTML = texts[i];
+      i++;
+      if(i >= texts.length){
+        clearInterval(fake);
+      }
+    },800);
+
+    setTimeout(()=>{
+      playReveal();
+
+      let cur = 0;
+
+      let interval = setInterval(()=>{
+        cur += 0.2;
+        if(cur >= ans){
+          cur = ans;
+          clearInterval(interval);
+        }
+        final.innerHTML = `✨ Final Answer: ${cur.toFixed(1)} ✨`;
+      },40);
+
+    },3000);
+  }
+}
+
+</script>
+
+</body>
+</html>
